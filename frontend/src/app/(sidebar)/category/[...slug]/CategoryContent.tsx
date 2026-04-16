@@ -69,7 +69,12 @@ function isPriceField(field: string): boolean {
 }
 
 function getItemPrice(item: DbMetalItem): string | null {
-  const entries = Object.entries(item).filter(([key, value]) => !ignoredFields.includes(key) && typeof value === "string");
+  const entries = Object.entries(item).reduce<Array<[string, string]>>((acc, [key, value]) => {
+    if (!ignoredFields.includes(key) && typeof value === "string") {
+      acc.push([key, value]);
+    }
+    return acc;
+  }, []);
 
   const prioritized = entries.find(([field, value]) => isPriceField(field) && value.trim().length > 0);
   if (prioritized) {

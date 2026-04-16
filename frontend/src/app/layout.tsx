@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -67,7 +68,14 @@ export default function RootLayout({
         />
         <noscript>
           <div>
-            <img src="https://mc.yandex.ru/watch/101105898" style={{ position: "absolute", left: "-9999px" }} alt="" />
+            <Image
+              src="https://mc.yandex.ru/watch/101105898"
+              width={1}
+              height={1}
+              unoptimized
+              style={{ position: "absolute", left: "-9999px" }}
+              alt=""
+            />
           </div>
         </noscript>
       </head>
