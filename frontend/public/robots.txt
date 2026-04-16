@@ -1,0 +1,16 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /server/
+Disallow: /static/
+Disallow: /favicon.ico
+Disallow: /404
+Disallow: /500
+
+# Host
+Host: https://kazmetalcord.kz
+
+# Sitemaps
+Sitemap: https://kazmetalcord.kz/sitemap.xml

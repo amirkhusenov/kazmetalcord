@@ -1,0 +1,111 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": [],
+      "project": []
+    },
+    "frontend": {
+      "entry": [
+        "src/app/**/page.{ts,tsx}",
+        "src/app/**/layout.{ts,tsx}",
+        "src/app/**/template.{ts,tsx}",
+        "src/app/**/loading.{ts,tsx}",
+        "src/app/**/error.{ts,tsx}",
+        "src/app/**/not-found.{ts,tsx}",
+        "src/app/**/global-error.{ts,tsx}",
+        "src/app/**/route.{ts,tsx}",
+        "src/app/**/default.{ts,tsx}",
+        "src/middleware.{ts,tsx}",
+        "src/instrumentation.{ts,tsx}",
+        "next.config.{js,ts,mjs}",
+        "tailwind.config.{js,ts,mjs}",
+        "postcss.config.{js,ts,mjs}",
+        "next-sitemap.config.{js,ts}",
+        "eslint.config.{js,ts,mjs}"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "*.config.{js,ts,mjs}"
+      ],
+      "paths": {
+        "@/*": ["./src/*"]
+      },
+      "next": {
+        "entry": [
+          "next.config.{js,ts,mjs}",
+          "src/middleware.{ts,tsx}",
+          "src/instrumentation.{ts,tsx}",
+          "src/app/**/page.{ts,tsx}",
+          "src/app/**/layout.{ts,tsx}",
+          "src/app/**/template.{ts,tsx}",
+          "src/app/**/loading.{ts,tsx}",
+          "src/app/**/error.{ts,tsx}",
+          "src/app/**/not-found.{ts,tsx}",
+          "src/app/**/global-error.{ts,tsx}",
+          "src/app/**/route.{ts,tsx}",
+          "src/app/**/default.{ts,tsx}"
+        ]
+      },
+      "tailwind": {
+        "config": ["tailwind.config.{js,ts,mjs}"]
+      },
+      "postcss": {
+        "config": ["postcss.config.{js,ts,mjs}"]
+      },
+      "eslint": {
+        "config": ["eslint.config.{js,ts,mjs}"]
+      },
+      "ignore": [
+        "**/*.d.ts",
+        ".next/**",
+        "node_modules/**"
+      ],
+      "ignoreFiles": [
+        "src/components/ui/**"
+      ],
+      "ignoreDependencies": [
+        "@next/bundle-analyzer",
+        "sharp",
+        "husky"
+      ]
+    },
+    "inserter": {
+      "entry": [
+        "index.ts",
+        "image-upload.ts",
+        "analyze-chars.ts",
+        "compare.ts",
+        "normalize.ts",
+        "stress.ts",
+        "playwright.config.ts"
+      ],
+      "project": [
+        "**/*.{ts,tsx,js,jsx}",
+        "!node_modules/**",
+        "!tests/**"
+      ],
+      "playwright": {
+        "config": ["playwright.config.ts"]
+      },
+      "ignore": [
+        "**/*.d.ts",
+        "node_modules/**"
+      ],
+      "ignoreDependencies": [
+        "ts-node"
+      ]
+    }
+  },
+  "ignore": [
+    "**/*.d.ts",
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/dist/**",
+    "**/build/**"
+  ],
+  "ignoreDependencies": [
+    "@types/node",
+    "typescript"
+  ]
+}

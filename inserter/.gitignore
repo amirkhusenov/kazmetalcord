@@ -1,0 +1,20 @@
+.idea
+.env
+node_modules
+data
+category-tree.json
+category-translit.json
+dannye
+fields-names-for-categories.json
+categories.json
+to_translit
+Данные
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/Полный
+
+mongodb-backup

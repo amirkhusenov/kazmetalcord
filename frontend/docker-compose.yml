@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:8.2.3-noble
+    container_name: kazmetalcord-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: kazmetalcord_admin_2025
+      MONGO_INITDB_DATABASE: kazmetalcord
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - kazmetalcord-network
+    ports:
+      - "27017:27017"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kazmetalcord-frontend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://admin:kazmetalcord_admin_2025@mongodb:27017/kazmetalcord?authSource=admin
+    ports:
+      - "80:80"
+    networks:
+      - kazmetalcord-network
+    depends_on:
+      - mongodb
+
+networks:
+  kazmetalcord-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
