@@ -56,10 +56,6 @@ export function TestimonialsSlider() {
   return (
     <div data-reveal="section" data-reviews-slider className="space-y-6">
       <div className="space-y-2">
-        <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-blue4">
-          <span className="h-px w-10 bg-blue4/70" />
-          Отзывы клиентов
-        </p>
         <h2 className="text-2xl font-bold leading-tight text-blue5 sm:text-3xl lg:text-4xl">Как нас оценивают после поставки</h2>
         <p className="max-w-3xl text-base text-blue5/70">Реальные комментарии от компаний, с которыми мы работаем на постоянной основе.</p>
       </div>

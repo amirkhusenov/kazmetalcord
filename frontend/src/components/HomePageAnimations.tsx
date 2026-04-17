@@ -12,11 +12,31 @@ export function HomePageAnimations() {
 
     gsap.registerPlugin(ScrollTrigger);
 
+    const isTouchDevice = ScrollTrigger.isTouch > 0;
+    const cleanupTasks: Array<() => void> = [];
+
     const ctx = gsap.context(() => {
       const sections = gsap.utils.toArray<HTMLElement>("[data-reveal='section']");
 
+      const animateOnEnter = (
+        targets: gsap.TweenTarget,
+        fromVars: gsap.TweenVars,
+        toVars: gsap.TweenVars,
+        trigger: gsap.DOMTarget,
+        start: string,
+      ) => {
+        ScrollTrigger.create({
+          trigger,
+          start,
+          once: true,
+          onEnter: () => {
+            gsap.fromTo(targets, fromVars, toVars);
+          },
+        });
+      };
+
       sections.forEach((section) => {
-        gsap.fromTo(
+        animateOnEnter(
           section,
           { autoAlpha: 0, y: 42 },
           {
@@ -24,12 +44,9 @@ export function HomePageAnimations() {
             y: 0,
             duration: 0.85,
             ease: "power3.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 84%",
-              once: true,
-            },
           },
+          section,
+          "top 84%",
         );
       });
 
@@ -87,7 +104,7 @@ export function HomePageAnimations() {
           return;
         }
 
-        gsap.fromTo(
+        animateOnEnter(
           items,
           { autoAlpha: 0, y: 28 },
           {
@@ -96,12 +113,9 @@ export function HomePageAnimations() {
             duration: 0.6,
             ease: "power2.out",
             stagger: amount,
-            scrollTrigger: {
-              trigger: triggerSelector,
-              start: "top 82%",
-              once: true,
-            },
           },
+          triggerSelector,
+          "top 82%",
         );
       };
 
@@ -132,9 +146,74 @@ export function HomePageAnimations() {
           },
         });
       });
+
+      if (isTouchDevice) {
+        const fallbackSelector = "[data-reveal='section'], .js-catalog-card, .js-client-card, .js-benefit-card, .js-step-card";
+        let rafId = 0;
+
+        const revealStuckVisibleElements = () => {
+          const viewportHeight = window.innerHeight;
+          const elements = document.querySelectorAll<HTMLElement>(fallbackSelector);
+
+          elements.forEach((element) => {
+            const rect = element.getBoundingClientRect();
+            const inViewport = rect.top < viewportHeight * 1.08 && rect.bottom > -40;
+            if (!inViewport) {
+              return;
+            }
+
+            const computed = window.getComputedStyle(element);
+            const hiddenByAnimation = computed.visibility === "hidden" || Number(computed.opacity) < 0.08;
+            if (hiddenByAnimation) {
+              gsap.to(element, {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.45,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          });
+        };
+
+        const scheduleFallbackReveal = () => {
+          if (rafId) {
+            return;
+          }
+
+          rafId = window.requestAnimationFrame(() => {
+            rafId = 0;
+            revealStuckVisibleElements();
+          });
+        };
+
+        const firstPass = window.setTimeout(scheduleFallbackReveal, 220);
+        const secondPass = window.setTimeout(scheduleFallbackReveal, 900);
+        window.addEventListener("scroll", scheduleFallbackReveal, { passive: true });
+        window.addEventListener("resize", scheduleFallbackReveal);
+
+        cleanupTasks.push(() => {
+          window.clearTimeout(firstPass);
+          window.clearTimeout(secondPass);
+          window.removeEventListener("scroll", scheduleFallbackReveal);
+          window.removeEventListener("resize", scheduleFallbackReveal);
+          if (rafId) {
+            window.cancelAnimationFrame(rafId);
+          }
+        });
+      }
+
+      const refreshOnLoad = () => ScrollTrigger.refresh();
+      const delayedRefresh = window.setTimeout(refreshOnLoad, 300);
+      window.addEventListener("load", refreshOnLoad);
+      cleanupTasks.push(() => {
+        window.clearTimeout(delayedRefresh);
+        window.removeEventListener("load", refreshOnLoad);
+      });
     });
 
     return () => {
+      cleanupTasks.forEach((task) => task());
       ctx.revert();
     };
   }, []);

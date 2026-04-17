@@ -134,7 +134,7 @@ export default async function Home() {
 
       <div className="site-container pb-12 pt-12 sm:pt-14 lg:pb-14 lg:pt-16">
         <div className="space-y-12 sm:space-y-14 lg:space-y-16">
-          <div data-reveal="section" data-highlight="metrics" className="overflow-hidden p-5 sm:p-7 lg:p-9">
+          <div data-reveal="section" data-highlight="metrics" className="overflow-hidden">
             <div className="max-w-3xl space-y-3">
               <h2 className="text-2xl font-black uppercase leading-tight text-blue5 sm:text-3xl lg:text-4xl">Надежность и масштаб в цифрах</h2>
               <p className="text-sm leading-relaxed text-blue5/70 sm:text-base">Ключевые показатели, которые отражают темп поставок и стабильность работы.</p>
