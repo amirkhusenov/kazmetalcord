@@ -24,7 +24,7 @@ const MOCK_ITEMS: DbMetalItem[] = [
     ГОСТ: "ГОСТ 19903-2015",
     Наличие: "В наличии",
     Описание: "Тестовый товар для проверки карточки товара.",
-  } as DbMetalItem,
+  } as unknown as DbMetalItem,
 ];
 
 interface IQuery {

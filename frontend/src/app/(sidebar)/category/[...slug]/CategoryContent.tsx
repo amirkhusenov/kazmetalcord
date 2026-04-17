@@ -2,6 +2,7 @@
 
 import tree from "@/category-tree.json";
 import { CategoryCard } from "@/components/CategoryCard";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +42,50 @@ const TAG_FIELD_PRIORITY = [
   "Ширина",
   "Сечение",
   "ГОСТ",
+];
+
+const STAINLESS_CHARACTERISTICS = [
+  "Коррозионная стойкость, включая контакт с химически агрессивными средами и морской водой.",
+  "Стабильность при высоких и низких температурах (жаропрочные и жаростойкие марки).",
+  "Хорошая свариваемость и пластичность для производственных задач.",
+  "Высокая механическая прочность и долговечность в эксплуатации.",
+];
+
+const STAINLESS_CLASSIFICATION = [
+  "Листовой (плоский): листы, полосы и ленты, поставка в листах или рулонах.",
+  "Сортовой: полнотелый прокат разного сечения (круг, квадрат, шестигранник, уголок, швеллер и др.).",
+  "Трубный: полые изделия круглого и профильного сечения (квадратного, прямоугольного, овального и др.).",
+];
+
+const STAINLESS_APPLICATIONS = [
+  "Строительство: прочные и долговечные каркасные конструкции, облицовка и отделка.",
+  "Коммунальное хозяйство: трубы, запорная арматура и сопутствующие элементы.",
+  "Нефтегазовая и химическая отрасль: трубопроводы и оборудование для агрессивных сред.",
+  "Машиностроение и промышленность: детали, метизы, элементы обшивки, оборудование и конвейерные линии.",
+  "Пищевая отрасль: емкости для хранения продукции и кухонная посуда (листовой и трубный прокат).",
+];
+
+const STAINLESS_FAQ = [
+  {
+    q: "Какие виды нержавеющего проката существуют?",
+    a: "Наиболее востребованы листовой (плиты, полосы), сортовой (круг, квадрат, уголок, швеллер) и трубный (круглые и профильные трубы).",
+  },
+  {
+    q: "Каковы основные свойства и преимущества нержавеющего проката?",
+    a: "Ключевые преимущества: высокая коррозионная и химическая стойкость, температурная стабильность, прочность и длительный срок службы.",
+  },
+  {
+    q: "Какие характеристики учитывать при покупке?",
+    a: "Важно учитывать геометрию и размеры, марку стали, технологию производства (горячекатаный/холоднокатаный) и требования проекта к качеству поверхности.",
+  },
+  {
+    q: "Как обслуживать нержавеющий прокат для дополнительной защиты от коррозии?",
+    a: "Базовая коррозионная стойкость уже высокая. При необходимости применяют дополнительные защитные покрытия и корректный режим эксплуатации.",
+  },
+  {
+    q: "Какие стандарты регулируют качество нержавеющего проката?",
+    a: "Основные требования описаны в ГОСТ 5582-75, 2590-88, 5949-75, 4986-79 и профильных нормативных документах на конкретный вид проката.",
+  },
 ];
 
 function Loader() {
@@ -435,6 +480,7 @@ export default function CategoryContent() {
   const isLeafLevel = foundCategories.length === 0;
   const categoryTitle = categories.at(-1) || "Каталог";
   const topDescription = getTopDescription(categoryTitle, isLeafLevel);
+  const showStainlessSeo = categories.some((category) => category.toLowerCase().includes("нержав"));
 
   const heroPoints = [
     "Понятная структура разделов и вложенных категорий",
@@ -596,6 +642,86 @@ export default function CategoryContent() {
           </div>
         </div>
       </section>
+
+      {showStainlessSeo ? (
+        <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="grid grid-cols-1 gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="p-5 sm:p-6">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue4/75">Экспертный обзор</p>
+              <h2 className="mt-2 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">Нержавеющий прокат в Казахстане</h2>
+              <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
+                Нержавеющий металлопрокат включает широкий перечень продукции из коррозионностойких марок стали. Базово в составе таких сталей
+                содержится не менее 10,5% хрома и не более 1,2% углерода, что обеспечивает стабильные эксплуатационные характеристики в
+                промышленной среде.
+              </p>
+
+              <h3 className="mt-6 text-base font-semibold text-slate-900 sm:text-lg">Характеристики нержавеющей стали</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700 sm:text-base">
+                Для изготовления нержавеющего проката применяются марки стали по ГОСТ 5632-2014. Для легирования, помимо хрома, используют никель,
+                марганец, кремний и другие элементы.
+              </p>
+              <ul className="mt-3 grid gap-2 text-sm text-slate-700">
+                {STAINLESS_CHARACTERISTICS.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="border-t border-slate-200 bg-slate-50 p-5 sm:p-6 lg:border-l lg:border-t-0">
+              <div className="rounded-xl border border-slate-200 bg-white p-4">
+                <h3 className="text-sm font-semibold text-slate-900">Технологии производства</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-700">
+                  Чаще всего применяют горячую и холодную прокатку. Горячекатаный прокат обычно экономичнее, а холоднокатаный обеспечивает более
+                  высокую точность, прочность и качество поверхности.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-200 bg-white p-5 sm:p-6">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <h3 className="text-base font-semibold text-slate-900">Классификация</h3>
+                <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-slate-700">
+                  {STAINLESS_CLASSIFICATION.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+
+              <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <h3 className="text-base font-semibold text-slate-900">Область применения</h3>
+                <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-slate-700">
+                  {STAINLESS_APPLICATIONS.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </div>
+
+            <div className="mt-5 rounded-xl border border-slate-200 bg-white px-4 sm:px-5">
+              <h3 className="pt-4 text-base font-semibold text-slate-900">FAQ: Часто задаваемые вопросы</h3>
+              <Accordion type="single" collapsible className="pb-1">
+                {STAINLESS_FAQ.map((item, index) => (
+                  <AccordionItem key={item.q} value={`faq-${index}`} className="border-slate-200">
+                    <AccordionTrigger className="py-3 text-sm text-slate-900 hover:no-underline">{item.q}</AccordionTrigger>
+                    <AccordionContent className="text-sm leading-relaxed text-slate-600">{item.a}</AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
     </div>
   );
