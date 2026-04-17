@@ -12,7 +12,20 @@ const COLLECTION_NAME = "metal_collection";
 const COLLECTION_NAME_CATEGORY_FIELD_VALUES = "category_field_values";
 const PAGE_SIZE = 30;
 const NAME_FIELD = "Наименование";
-const MOCK_ITEMS: DbMetalItem[] = [];
+const MOCK_ITEMS: DbMetalItem[] = [
+  {
+    [NAME_FIELD]: "Тестовый лист A36 (демо)",
+    translitTitle: "testovyy_list_a36_demo",
+    categoryPath: ["Черный прокат", "Листовой прокат", "Низколегированный лист"],
+    translitCategoryPath: ["Chyernyyj_prokat", "Listovoy_prokat", "Nizkolyegirovannyy_list"],
+    Цена: "от 245 000 ₸ / т",
+    Марка: "A36 / Ст3",
+    Размер: "6x1500x6000 мм",
+    ГОСТ: "ГОСТ 19903-2015",
+    Наличие: "В наличии",
+    Описание: "Тестовый товар для проверки карточки товара.",
+  } as DbMetalItem,
+];
 
 interface IQuery {
   categories?: string[];
@@ -173,7 +186,12 @@ export const getLatest3Items = cache(async (categories: string[]): Promise<DbMet
 });
 
 export const getItems = cache(async (query: IQuery): Promise<ItemsWithPagination> => {
-  if (!isMongoConfigured()) {
+  const demoItemRequested = Boolean(
+    query.translitTitle &&
+      MOCK_ITEMS.some((item) => item.translitTitle.toLowerCase().startsWith(query.translitTitle?.toLowerCase() || "")),
+  );
+
+  if (demoItemRequested || !isMongoConfigured()) {
     return getItemsFromMock(query);
   }
 
