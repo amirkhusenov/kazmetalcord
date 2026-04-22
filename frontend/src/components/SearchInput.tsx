@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { translitCyrillicToLatin } from "@/lib/utils";
 import { getItems } from "@/server/db";
 import { DbMetalItem } from "@/types";
 import { cx } from "class-variance-authority";
@@ -121,7 +120,7 @@ export function SearchInput({ classNames, onClose }: SearchInputProps) {
               {results.map((item, index) => (
                 <Link
                   key={index}
-                  href={`/product/${translitCyrillicToLatin(item["Наименование"])}`}
+                  href={`/product/${encodeURIComponent(item.translitTitle)}`}
                   prefetch={false}
                   className="block"
                   onClick={() => setIsOpen(false)}

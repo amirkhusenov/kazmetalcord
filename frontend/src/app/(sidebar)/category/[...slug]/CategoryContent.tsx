@@ -44,6 +44,28 @@ const TAG_FIELD_PRIORITY = [
   "ГОСТ",
 ];
 
+type SeoFaqItem = {
+  q: string;
+  a: string;
+};
+
+type CategorySeoContent = {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  characteristicsTitle: string;
+  characteristicsIntro: string;
+  characteristics: string[];
+  productionTitle: string;
+  productionText: string;
+  classificationTitle: string;
+  classification: string[];
+  applicationsTitle: string;
+  applications: string[];
+  faqTitle: string;
+  faq: SeoFaqItem[];
+};
+
 const STAINLESS_CHARACTERISTICS = [
   "Коррозионная стойкость, включая контакт с химически агрессивными средами и морской водой.",
   "Стабильность при высоких и низких температурах (жаропрочные и жаростойкие марки).",
@@ -88,6 +110,141 @@ const STAINLESS_FAQ = [
   },
 ];
 
+const DEFAULT_CLASSIFICATION = [
+  "Листовой сегмент: позиции для раскроя, производства и строительных задач.",
+  "Сортовой сегмент: профили, прутки и другие форматы для проектных поставок.",
+  "Трубный и фасонный сегмент: решения для инженерных систем и промышленной инфраструктуры.",
+];
+
+const DEFAULT_APPLICATIONS = [
+  "Строительство и девелопмент: каркасы, перекрытия, инженерные сети и металлоконструкции.",
+  "Производственные предприятия: комплектующие и сырье для серийного выпуска продукции.",
+  "Сервисные компании и монтажные подрядчики: закрытие задач по регулярным закупкам.",
+  "Инфраструктурные проекты: поставки для объектов с фиксированными сроками и спецификациями.",
+];
+
+function buildDefaultFaq(categoryTitle: string): SeoFaqItem[] {
+  return [
+    {
+      q: `Как заказать ${categoryTitle.toLowerCase()}?`,
+      a: "Отправьте заявку с номенклатурой и объемом. Менеджер подготовит расчет, проверит наличие и согласует условия поставки.",
+    },
+    {
+      q: "Можно ли получить документы для бухгалтерии и тендера?",
+      a: "Да, сопровождаем поставки комплектом закрывающих документов и работаем в B2B-формате с проектными заказами.",
+    },
+    {
+      q: "Как быстро можно отгрузить продукцию?",
+      a: "Срок зависит от позиции и объема. По складским товарам даем быстрый старт отгрузки, по редким позициям согласуем график отдельно.",
+    },
+  ];
+}
+
+function buildDefaultSeoContent(categoryTitle: string): CategorySeoContent {
+  return {
+    eyebrow: "Категория",
+    title: `${categoryTitle} в Казахстане`,
+    intro: `Раздел «${categoryTitle}» сформирован как рабочий B2B-каталог для подбора позиций по параметрам, сравнения номенклатуры и быстрого перехода к заявке. Мы помогаем закрывать задачи снабжения для производства, строительства и сервисных компаний.`,
+    characteristicsTitle: "Что важно при подборе",
+    characteristicsIntro:
+      "При выборе позиции в каталоге учитывайте марку, размеры, требования по стандартам, сроки поставки и формат документов под ваш проект.",
+    characteristics: [
+      "Работаем с оптовыми и проектными поставками по Казахстану.",
+      "Согласовываем условия отгрузки под график вашего объекта или производства.",
+      "Помогаем подобрать альтернативные позиции при ограничениях по срокам.",
+      "Держим акцент на понятной структуре каталога и быстрых коммуникациях с менеджером.",
+    ],
+    productionTitle: "Формат поставки",
+    productionText:
+      "Поставляем продукцию со складских остатков и под заказ. Согласуем логистику, комплект документов и коммерческие условия под задачи отдела закупок.",
+    classificationTitle: "Структура раздела",
+    classification: DEFAULT_CLASSIFICATION,
+    applicationsTitle: "Где применяется",
+    applications: DEFAULT_APPLICATIONS,
+    faqTitle: "FAQ: Часто задаваемые вопросы",
+    faq: buildDefaultFaq(categoryTitle),
+  };
+}
+
+const STAINLESS_SEO_CONTENT: CategorySeoContent = {
+  eyebrow: "Экспертный обзор",
+  title: "Нержавеющий прокат в Казахстане",
+  intro:
+    "Нержавеющий металлопрокат включает широкий перечень продукции из коррозионностойких марок стали. Базово в составе таких сталей содержится не менее 10,5% хрома и не более 1,2% углерода, что обеспечивает стабильные эксплуатационные характеристики в промышленной среде.",
+  characteristicsTitle: "Характеристики нержавеющей стали",
+  characteristicsIntro:
+    "Для изготовления нержавеющего проката применяются марки стали по ГОСТ 5632-2014. Для легирования, помимо хрома, используют никель, марганец, кремний и другие элементы.",
+  characteristics: STAINLESS_CHARACTERISTICS,
+  productionTitle: "Технологии производства",
+  productionText:
+    "Чаще всего применяют горячую и холодную прокатку. Горячекатаный прокат обычно экономичнее, а холоднокатаный обеспечивает более высокую точность, прочность и качество поверхности.",
+  classificationTitle: "Классификация",
+  classification: STAINLESS_CLASSIFICATION,
+  applicationsTitle: "Область применения",
+  applications: STAINLESS_APPLICATIONS,
+  faqTitle: "FAQ: Часто задаваемые вопросы",
+  faq: STAINLESS_FAQ,
+};
+
+const CAST_IRON_SEO_CONTENT: CategorySeoContent = {
+  eyebrow: "Категория",
+  title: "Чугунный прокат в Казахстане",
+  intro:
+    "Компания KazMetalCord поставляет чугунный прокат по Казахстану с отгрузкой со склада в Алматы и других филиалов. Раздел собран как рабочий каталог для B2B-закупок: можно быстро выбрать нужные позиции, уточнить актуальную стоимость и получить сопровождение менеджера.",
+  characteristicsTitle: "Преимущества раздела",
+  characteristicsIntro:
+    "Структура каталога помогает быстро перейти от категории к конкретным позициям и отправить запрос на расчет без лишних шагов.",
+  characteristics: [
+    "Поставка по регионам Казахстана с согласованием логистики под проект.",
+    "Актуализация наличия и стоимости по запросу менеджеру.",
+    "Сопровождение по документам для корпоративных закупок.",
+    "Поддержка по подбору аналогов и уточнению технических параметров.",
+  ],
+  productionTitle: "Условия поставки",
+  productionText:
+    "Для заказа доступны позиции со склада и под согласованный график поставки. Менеджер помогает собрать заявку, подтвердить условия отгрузки и сформировать коммерческое предложение.",
+  classificationTitle: "Основные группы продукции",
+  classification: [
+    "Чугунные трубы, фитинги и элементы инженерных систем.",
+    "Чугунная арматура, задвижки и запорные компоненты.",
+    "Литые чугунные изделия для промышленного и коммунального применения.",
+  ],
+  applicationsTitle: "Сферы применения",
+  applications: [
+    "Городская и промышленная инфраструктура.",
+    "Системы водоснабжения, канализации и тепловых сетей.",
+    "Производственные площадки и объекты капитального строительства.",
+  ],
+  faqTitle: "FAQ: Часто задаваемые вопросы",
+  faq: [
+    {
+      q: "Есть ли доставка чугунного проката по Казахстану?",
+      a: "Да, организуем доставку в нужный регион и согласуем формат отгрузки под график объекта.",
+    },
+    {
+      q: "Можно ли уточнить актуальную цену перед заказом?",
+      a: "Да, стоимость подтверждается менеджером по заявке с учетом номенклатуры, объема и сроков поставки.",
+    },
+    {
+      q: "Предоставляете ли документы для B2B-закупок?",
+      a: "Да, поставки сопровождаются необходимыми закрывающими и сопроводительными документами.",
+    },
+  ],
+};
+
+const CATEGORY_SEO_BY_SLUG: Record<string, CategorySeoContent> = {
+  chugunnyyj_prokat: CAST_IRON_SEO_CONTENT,
+  nyerzhavyeyushchij_prokat: STAINLESS_SEO_CONTENT,
+};
+
+function resolveCategorySeoContent(categoryPath: string[]): CategorySeoContent {
+  const categoryTitle = categoryPath.at(-1) || "Каталог";
+  const rootCategoryTitle = categoryPath.at(0) || categoryTitle;
+  const categorySlug = translitCyrillicToLatin(categoryTitle).toLowerCase();
+  const rootSlug = translitCyrillicToLatin(rootCategoryTitle).toLowerCase();
+  return CATEGORY_SEO_BY_SLUG[categorySlug] || CATEGORY_SEO_BY_SLUG[rootSlug] || buildDefaultSeoContent(categoryTitle);
+}
+
 function Loader() {
   return (
     <div className="flex items-center justify-center py-10">
@@ -102,7 +259,7 @@ function getIsLeafCategory(category: Category): boolean {
 
 function getTopDescription(categoryTitle: string, isLeafLevel: boolean): string {
   if (isLeafLevel) {
-    return `В разделе «${categoryTitle}» собраны товарные позиции для закупки под технические требования проекта: можно быстро отфильтровать номенклатуру и отправить запрос на расчет цены и сроков.`;
+    return `В разделе «${categoryTitle}» собраны товарные позиции с основными параметрами для подбора.`;
   }
 
   return `Категория «${categoryTitle}» объединяет основные направления ассортимента для производственных и строительных задач. Выберите нужный подраздел, чтобы перейти к конкретным позициям и коммерческому расчету.`;
@@ -448,25 +605,27 @@ export default function CategoryContent() {
           {Object.entries(fields)
             .filter(([key]) => key !== "_id")
             .map(([field, values]) => (
-              <Select
-                key={field}
-                value={selectedFilters[field] && values.includes(selectedFilters[field]) ? selectedFilters[field] : ALL_FILTER_VALUE}
-                onValueChange={(value) => handleFilterChange(field, value)}
-              >
-                <SelectTrigger className="w-full border-slate-300 bg-white text-slate-700 focus:ring-blue5">
-                  <SelectValue placeholder={field} />
-                </SelectTrigger>
-                <SelectContent>
-                  <ScrollArea className="h-[220px]">
-                    <SelectItem value={ALL_FILTER_VALUE}>Все</SelectItem>
-                    {values.map((value) => (
-                      <SelectItem key={value} value={value}>
-                        {value}
-                      </SelectItem>
-                    ))}
-                  </ScrollArea>
-                </SelectContent>
-              </Select>
+              <div key={field} className="space-y-1.5">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{field}</p>
+                <Select
+                  value={selectedFilters[field] && values.includes(selectedFilters[field]) ? selectedFilters[field] : ALL_FILTER_VALUE}
+                  onValueChange={(value) => handleFilterChange(field, value)}
+                >
+                  <SelectTrigger className="w-full border-slate-300 bg-white text-slate-700 focus:ring-blue5">
+                    <SelectValue placeholder={field} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <ScrollArea className="h-[220px]">
+                      <SelectItem value={ALL_FILTER_VALUE}>Все</SelectItem>
+                      {values.map((value) => (
+                        <SelectItem key={value} value={value}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </div>
             ))}
         </div>
       </section>
@@ -480,13 +639,7 @@ export default function CategoryContent() {
   const isLeafLevel = foundCategories.length === 0;
   const categoryTitle = categories.at(-1) || "Каталог";
   const topDescription = getTopDescription(categoryTitle, isLeafLevel);
-  const showStainlessSeo = categories.some((category) => category.toLowerCase().includes("нержав"));
-
-  const heroPoints = [
-    "Понятная структура разделов и вложенных категорий",
-    "Фильтры включаются только на этапе просмотра товаров",
-    "Быстрый переход к заявке и консультации менеджера",
-  ];
+  const categorySeoContent = resolveCategorySeoContent(categories);
 
   return (
     <div className="space-y-6">
@@ -496,15 +649,6 @@ export default function CategoryContent() {
           <h1 className="mt-2 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">{categoryTitle}</h1>
           <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">{topDescription}</p>
         </div>
-
-        <ul className="mt-4 grid gap-2 text-sm text-slate-700 sm:grid-cols-2 lg:grid-cols-3">
-          {heroPoints.map((point) => (
-            <li key={point} className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue5" />
-              <span>{point}</span>
-            </li>
-          ))}
-        </ul>
       </section>
 
       {isLeafLevel ? renderFilters() : null}
@@ -530,9 +674,11 @@ export default function CategoryContent() {
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {items.map((item, index) => {
                   const name = item[PRODUCT_NAME_KEY];
-                  const productLink = `/product/${translitCyrillicToLatin(name)}`;
+                  const productSlug = item.translitTitle?.trim() || translitCyrillicToLatin(name);
+                  const productLink = `/product/${encodeURIComponent(productSlug)}`;
                   const productImage = getImageUrl(item.translitCategoryPath);
                   const price = getItemPrice(item);
+                  const hasPrice = Boolean(price);
                   const tag = getPrimaryTag(item, allFields);
 
                   return (
@@ -560,7 +706,7 @@ export default function CategoryContent() {
                         </Badge>
 
                         <div className="flex flex-wrap gap-2">
-                          <Button size="sm" className="h-8 bg-blue5 px-3 text-xs font-semibold text-white hover:bg-blue4" asChild>
+                          <Button size="sm" className={cn("h-8 bg-blue5 px-3 text-xs font-semibold text-white hover:bg-blue4", hasPrice && "hidden")} asChild>
                             <Link target="_blank" href={contacts.phone.link}>
                               <Phone className="mr-1.5 h-3.5 w-3.5" /> Запросить цену
                             </Link>
@@ -643,85 +789,73 @@ export default function CategoryContent() {
         </div>
       </section>
 
-      {showStainlessSeo ? (
-        <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <div className="grid grid-cols-1 gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="p-5 sm:p-6">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue4/75">Экспертный обзор</p>
-              <h2 className="mt-2 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">Нержавеющий прокат в Казахстане</h2>
-              <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
-                Нержавеющий металлопрокат включает широкий перечень продукции из коррозионностойких марок стали. Базово в составе таких сталей
-                содержится не менее 10,5% хрома и не более 1,2% углерода, что обеспечивает стабильные эксплуатационные характеристики в
-                промышленной среде.
-              </p>
+      <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div className="grid grid-cols-1 gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-5 sm:p-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue4/75">{categorySeoContent.eyebrow}</p>
+            <h2 className="mt-2 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">{categorySeoContent.title}</h2>
+            <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">{categorySeoContent.intro}</p>
 
-              <h3 className="mt-6 text-base font-semibold text-slate-900 sm:text-lg">Характеристики нержавеющей стали</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-700 sm:text-base">
-                Для изготовления нержавеющего проката применяются марки стали по ГОСТ 5632-2014. Для легирования, помимо хрома, используют никель,
-                марганец, кремний и другие элементы.
-              </p>
-              <ul className="mt-3 grid gap-2 text-sm text-slate-700">
-                {STAINLESS_CHARACTERISTICS.map((item) => (
+            <h3 className="mt-6 text-base font-semibold text-slate-900 sm:text-lg">{categorySeoContent.characteristicsTitle}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-700 sm:text-base">{categorySeoContent.characteristicsIntro}</p>
+            <ul className="mt-3 grid gap-2 text-sm text-slate-700">
+              {categorySeoContent.characteristics.map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue5" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="border-t border-slate-200 bg-slate-50 p-5 sm:p-6 lg:border-l lg:border-t-0">
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
+              <h3 className="text-sm font-semibold text-slate-900">{categorySeoContent.productionTitle}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700">{categorySeoContent.productionText}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-slate-200 bg-white p-5 sm:p-6">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <h3 className="text-base font-semibold text-slate-900">{categorySeoContent.classificationTitle}</h3>
+              <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-slate-700">
+                {categorySeoContent.classification.map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue5" />
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue5" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-            </div>
+            </article>
 
-            <div className="border-t border-slate-200 bg-slate-50 p-5 sm:p-6 lg:border-l lg:border-t-0">
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
-                <h3 className="text-sm font-semibold text-slate-900">Технологии производства</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-700">
-                  Чаще всего применяют горячую и холодную прокатку. Горячекатаный прокат обычно экономичнее, а холоднокатаный обеспечивает более
-                  высокую точность, прочность и качество поверхности.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-200 bg-white p-5 sm:p-6">
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <h3 className="text-base font-semibold text-slate-900">Классификация</h3>
-                <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-slate-700">
-                  {STAINLESS_CLASSIFICATION.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-
-              <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <h3 className="text-base font-semibold text-slate-900">Область применения</h3>
-                <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-slate-700">
-                  {STAINLESS_APPLICATIONS.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </div>
-
-            <div className="mt-5 rounded-xl border border-slate-200 bg-white px-4 sm:px-5">
-              <h3 className="pt-4 text-base font-semibold text-slate-900">FAQ: Часто задаваемые вопросы</h3>
-              <Accordion type="single" collapsible className="pb-1">
-                {STAINLESS_FAQ.map((item, index) => (
-                  <AccordionItem key={item.q} value={`faq-${index}`} className="border-slate-200">
-                    <AccordionTrigger className="py-3 text-sm text-slate-900 hover:no-underline">{item.q}</AccordionTrigger>
-                    <AccordionContent className="text-sm leading-relaxed text-slate-600">{item.a}</AccordionContent>
-                  </AccordionItem>
+            <article className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <h3 className="text-base font-semibold text-slate-900">{categorySeoContent.applicationsTitle}</h3>
+              <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-slate-700">
+                {categorySeoContent.applications.map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue5" />
+                    <span>{item}</span>
+                  </li>
                 ))}
-              </Accordion>
-            </div>
+              </ul>
+            </article>
           </div>
-        </section>
-      ) : null}
+
+          <div className="mt-5 rounded-xl border border-slate-200 bg-white px-4 sm:px-5">
+            <h3 className="pt-4 text-base font-semibold text-slate-900">{categorySeoContent.faqTitle}</h3>
+            <Accordion type="single" collapsible className="pb-1">
+              {categorySeoContent.faq.map((item, index) => (
+                <AccordionItem key={item.q} value={`faq-${index}`} className="border-slate-200">
+                  <AccordionTrigger className="py-3 text-sm text-slate-900 hover:no-underline">{item.q}</AccordionTrigger>
+                  <AccordionContent className="text-sm leading-relaxed text-slate-600">{item.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
 
     </div>
   );

@@ -45,6 +45,42 @@ const ItemsWithPaginationSchema = z.object({
 
 type ItemsWithPagination = z.infer<typeof ItemsWithPaginationSchema>;
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const TRANSLIT_TITLE_TRANSFORMS: Array<(value: string) => string> = [
+  (value) => value.replaceAll("ye", "e"),
+  (value) => value.replaceAll("yy", "y"),
+];
+
+function buildTranslitTitleCandidates(value: string): string[] {
+  const normalized = value.trim();
+  if (!normalized) {
+    return [];
+  }
+
+  const queue = [normalized, normalized.toLowerCase()];
+  const seen = new Set(queue);
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current) {
+      continue;
+    }
+
+    for (const transform of TRANSLIT_TITLE_TRANSFORMS) {
+      const transformed = transform(current);
+      if (transformed && !seen.has(transformed)) {
+        seen.add(transformed);
+        queue.push(transformed);
+      }
+    }
+  }
+
+  return Array.from(seen);
+}
+
 function isMongoConfigured(): boolean {
   return getMissingEnvVars(["MONGODB_URI"]).length === 0;
 }
@@ -214,7 +250,7 @@ export const getItems = cache(async (query: IQuery): Promise<ItemsWithPagination
   }
 
   if (translitTitle) {
-    filter.translitTitle = { $regex: `^${translitTitle}` };
+    filter.translitTitle = { $regex: `^${escapeRegExp(translitTitle)}`, $options: "i" };
   }
 
   if (fields) {
@@ -257,4 +293,47 @@ export const getItems = cache(async (query: IQuery): Promise<ItemsWithPagination
     totalItems,
     totalPages,
   });
+});
+
+export const getItemByTranslitTitle = cache(async (translitTitle: string): Promise<DbMetalItem | null> => {
+  const normalized = translitTitle?.trim();
+  if (!normalized) {
+    return null;
+  }
+
+  const candidates = buildTranslitTitleCandidates(normalized);
+  if (candidates.length === 0) {
+    return null;
+  }
+
+  if (!isMongoConfigured()) {
+    const item = MOCK_ITEMS.find((mockItem) => candidates.includes(mockItem.translitTitle.toLowerCase()));
+    if (!item) {
+      return null;
+    }
+
+    return DbMetalItemsSchema.parse([item])[0];
+  }
+
+  const { db } = await connectToDatabase();
+  const collection = db.collection<DbMetalItem>(COLLECTION_NAME);
+
+  let item = await collection.findOne({ translitTitle: { $in: candidates } }, { projection: { _id: 0 } });
+
+  if (!item) {
+    item = await collection.findOne(
+      {
+        $or: candidates.map((candidate) => ({
+          translitTitle: { $regex: `^${escapeRegExp(candidate)}$`, $options: "i" },
+        })),
+      },
+      { projection: { _id: 0 } },
+    );
+  }
+
+  if (!item) {
+    return null;
+  }
+
+  return DbMetalItemsSchema.parse([item])[0];
 });

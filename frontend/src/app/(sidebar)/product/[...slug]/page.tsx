@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import contacts from "@/contacts.json";
 import { ignoredFields } from "@/lib/const";
 import { cn, getImageUrl, translitCyrillicToLatin } from "@/lib/utils";
-import { getItems } from "@/server/db";
+import { getItemByTranslitTitle } from "@/server/db";
 import { DbMetalItem } from "@/types";
 import { MessageCircle, Phone } from "lucide-react";
 import { Metadata } from "next";
@@ -52,6 +52,20 @@ function getProductPrice(product: DbMetalItem): string {
   }
 
   return "Цена по запросу";
+}
+
+function hasProductPrice(product: DbMetalItem): boolean {
+  for (const [field, value] of Object.entries(product)) {
+    if (ignoredFields.includes(field) || typeof value !== "string" || value.trim().length === 0) {
+      continue;
+    }
+
+    if (isPriceField(field)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function getProductTags(product: DbMetalItem, max = 4): Array<{ field: string; value: string }> {
@@ -151,10 +165,7 @@ function getProductDescription(product: DbMetalItem): string {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const productSlug = (await params).slug.at(0);
-  const { items: products } = await getItems({
-    translitTitle: productSlug,
-  });
-  const product = products.at(0);
+  const product = productSlug ? await getItemByTranslitTitle(productSlug) : null;
 
   if (!product) {
     return {
@@ -173,20 +184,18 @@ export default async function ProductPage(props: ProductPageProps) {
   const productSlug = (await props.params).slug.at(0);
 
   if (!productSlug) {
-    return notFound();
+    notFound();
   }
 
-  const { items: products } = await getItems({
-    translitTitle: productSlug,
-  });
-  const product = products.at(0);
+  const product = await getItemByTranslitTitle(productSlug);
 
   if (!product) {
-    return notFound();
+    notFound();
   }
 
   const productName = product[PRODUCT_NAME_KEY];
   const price = getProductPrice(product);
+  const hasPrice = hasProductPrice(product);
   const tags = getProductTags(product);
   const galleryImages = getProductGalleryImages(product);
   const productSpecs = Object.entries(product)
@@ -250,7 +259,7 @@ export default async function ProductPage(props: ProductPageProps) {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <Button className="bg-blue5 text-white hover:bg-blue4" asChild>
+              <Button className={cn("bg-blue5 text-white hover:bg-blue4", hasPrice && "hidden")} asChild>
                 <Link target="_blank" href={contacts.phone.link}>
                   <Phone className="mr-1.5 h-4 w-4" /> Запросить цену
                 </Link>
